@@ -27,19 +27,6 @@ export class ConversationRepo {
 
   async find(page: number, limit: number) {
     try {
-      // const skip = (page - 1) * limit;
-
-      // const ConversationAndMemberGroup = [
-      //   {
-      //     $lookup: {
-      //       from: "groupmembers",
-      //       localField: "_id",
-      //       foreignField: "conversation_id",
-      //       as: "ConversationWithMember",
-      //     },
-      //   },
-      // ];
-
       const skip = (page - 1) * limit;
 
       const ConversationAndMemberGroup = [

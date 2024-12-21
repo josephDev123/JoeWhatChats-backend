@@ -24,27 +24,6 @@ const ConversationControllerImp = new ConversationController(
 Conversation.post(
   "/create",
   ConversationControllerImp.create.bind(ConversationControllerImp)
-  // async function (req: Request, res: Response, next: NextFunction) {
-  //   try {
-  //     const body = req.body;
-  //     const doc = new roomModel({
-  //       userEmail: body.userEmail,
-  //       roomUniqueName: body.roomUniqueName,
-  //       avatar: body.avatar,
-  //       time: body.time,
-  //     });
-  //     await doc.save();
-  //     return res.status(200).json({ msg: "success" });
-  //   } catch (error) {
-  //     const errorHandler = new GlobalError(
-  //       "something went wrong",
-  //       "UnknownError",
-  //       500,
-  //       false
-  //     );
-  //     return next(errorHandler);
-  //   }
-  // }
 );
 
 Conversation.post(

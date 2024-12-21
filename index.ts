@@ -16,6 +16,7 @@ import { Conversation } from "./routes/Conversation/conversation";
 import { PollModel } from "./models/Polling";
 import { VoteRouter } from "./routes/votePoll";
 import { chatRoute } from "./routes/chat/Chat";
+import { GroupMemberRoute } from "./routes/groupmembers/groupmember";
 
 dotenv.config();
 
@@ -223,6 +224,7 @@ const startApp = async () => {
     app.use("/auth", AuthRoute);
     app.use("/conversation", Conversation);
     app.use("/chat", chatRoute);
+    app.use("/group-member", GroupMemberRoute);
     // app.use("/chat", chatMsgRoute);
     app.use("/vote", VoteRouter);
     app.use(errorHandleMiddleware);

@@ -2,6 +2,7 @@ import mongoose, { Model } from "mongoose";
 import { ChatType } from "../models/Chat";
 import { ChatDTO } from "../DTO/ChatDTO";
 import { GlobalError } from "../utils/globalError";
+import { Conversation } from "../routes/Conversation/conversation";
 
 export class ChatRepo {
   constructor(private readonly ChatModel: Model<ChatType>) {}
@@ -29,6 +30,35 @@ export class ChatRepo {
             conversation_id: new mongoose.Types.ObjectId(
               messageConversation_id
             ),
+          },
+        },
+        {
+          $lookup: {
+            from: "conversations",
+            localField: "conversation_id",
+            foreignField: "_id",
+            as: "Conversation",
+          },
+        },
+
+        // {
+        //   $unwind: "$Conversation",
+        // },
+        {
+          $lookup: {
+            from: "groupmembers",
+            localField: "Conversation._id",
+            foreignField: "conversation_id",
+            as: "GroupMember",
+          },
+        },
+
+        {
+          $lookup: {
+            from: "users",
+            localField: "GroupMember.user_id",
+            foreignField: "_id",
+            as: "userDetails",
           },
         },
       ];
