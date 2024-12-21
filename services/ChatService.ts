@@ -21,4 +21,14 @@ export class ChatService {
       );
     }
   }
+
+  async find(messageConversation_id: string) {
+    try {
+      const response = await this.ChatRepo.find(messageConversation_id);
+      return response;
+    } catch (error) {
+      const customError = error as GlobalError;
+      throw new GlobalError(customError.message, customError.name, 500, false);
+    }
+  }
 }

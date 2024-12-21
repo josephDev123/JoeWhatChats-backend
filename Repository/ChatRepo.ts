@@ -1,4 +1,4 @@
-import { Model } from "mongoose";
+import mongoose, { Model } from "mongoose";
 import { ChatType } from "../models/Chat";
 import { ChatDTO } from "../DTO/ChatDTO";
 import { GlobalError } from "../utils/globalError";
@@ -18,6 +18,25 @@ export class ChatRepo {
         CustomError.statusCode,
         CustomError.operational
       );
+    }
+  }
+
+  async find(messageConversation_id: string) {
+    try {
+      const aggregatePipeline = [
+        {
+          $match: {
+            conversation_id: new mongoose.Types.ObjectId(
+              messageConversation_id
+            ),
+          },
+        },
+      ];
+      const response = await this.ChatModel.aggregate(aggregatePipeline);
+      return response;
+    } catch (error) {
+      const customError = error as GlobalError;
+      throw new GlobalError(customError.message, customError.name, 500, false);
     }
   }
 }
