@@ -30,6 +30,12 @@ jobs:
       - name: Copy node_modules to build folder
         run: cp -r node_modules dist/
 
+      - name: Create .env file
+        run: |
+          echo "PORT=${{ secrets.PORT }}" >> dist/.env
+          echo "DATABASE_URL=${{ secrets.DATABASE_URL }}" >> dist/.env
+          echo "SECRET=${{ secrets.SECRET }}" >> dist/.env
+
       - name: log build file
         run: ls dist/
 
