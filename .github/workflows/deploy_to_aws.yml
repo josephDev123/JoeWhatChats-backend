@@ -18,6 +18,9 @@ jobs:
         with:
           node-version: "20"
 
+      - name: copy package.json
+        run: cp package.json dist/
+
       - name: Install dependencies
         run: npm install
 
