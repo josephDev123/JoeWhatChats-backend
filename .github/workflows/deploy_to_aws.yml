@@ -26,3 +26,6 @@ jobs:
 
       - name: Build application
         run: "npm run build"
+
+      - name: log build file
+        run: ls dist/
