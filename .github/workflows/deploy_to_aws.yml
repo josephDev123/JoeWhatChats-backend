@@ -60,4 +60,4 @@ jobs:
         run: chmod 777 dist/.env
 
       - name: Verify artifact content
-        run: ls -lh ./dist/
+        run: ls -la ./dist/
