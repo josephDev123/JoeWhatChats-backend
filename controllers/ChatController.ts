@@ -10,7 +10,7 @@ export class ChatController {
       const payload = req.body;
       const ExtractPayload: ChatDTO = {
         message_text: payload.message_text,
-        // from_number: payload.from_number,
+        from_userId: payload.from_userId,
         message_type: payload.message_type,
         imgUrl: payload.imgUrl,
         conversation_id: payload.conversation_id,
