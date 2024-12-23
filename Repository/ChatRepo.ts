@@ -59,6 +59,7 @@ export class ChatRepo {
             _id: new mongoose.Types.ObjectId(messageConversation_id),
           },
         },
+
         {
           $lookup: {
             from: "groupmembers",
@@ -81,6 +82,7 @@ export class ChatRepo {
         {
           $group: {
             _id: "$_id",
+            conversation_name: { $first: "$conversation_name" },
             GroupMembers: { $addToSet: "$GroupMembers" },
             UserDetails: { $addToSet: { $arrayElemAt: ["$UserDetails", 0] } },
           },
