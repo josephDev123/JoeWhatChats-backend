@@ -14,7 +14,7 @@ export class ChatController {
         message_type: payload.message_type,
         imgUrl: payload.imgUrl,
         conversation_id: payload.conversation_id,
-        sent_datetime: payload.sent_datetime,
+        // sent_datetime: payload.sent_datetime,
       };
 
       const result = await this.ChatService.CreateChat(ExtractPayload);

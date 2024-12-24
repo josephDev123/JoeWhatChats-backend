@@ -44,78 +44,7 @@ const startApp = async () => {
 
     // socketServer.io
     io.on("connection", (socket) => {
-      socket.on("offer", (data) => {
-        io.emit("offer", data);
-      });
-
-      socket.on("answer", (data) => {
-        io.emit("answer", data);
-      });
-
-      socket.on("iceCandidate", (data) => {
-        io.emit("iceCandidate", data);
-      });
-
-      socket.on("MemberJoined", (data) => {
-        io.emit("MemberJoined", data);
-      });
-      socket.on("createRoom", async (roomOption) => {
-        socket.join(roomOption.roomUniqueName);
-        io.to(roomOption.roomUniqueName).emit("getCreateRoom", roomOption);
-
-        const roomModelDb = new roomModel(roomOption);
-        await roomModelDb.save();
-      });
-
-      socket.on("JoinInviteRoom", async (data) => {
-        try {
-          // await roomModel.updateOne(
-          //   { roomUniqueName: data.roomUniqueName },
-          //   { $addToSet: { join: data } }
-          // );
-
-          socket.join(data.roomUniqueName);
-          const existingRooms = await roomModel.find({
-            roomUniqueName: data.roomUniqueName,
-          });
-
-          existingRooms.forEach(async (existingRoom) => {
-            const userEmailExists = existingRoom.join.some(
-              (joinData: any) => joinData.userEmail === data.userEmail
-            );
-
-            if (!userEmailExists) {
-              await roomModel.updateOne(
-                { roomUniqueName: data.roomUniqueName },
-                { $addToSet: { join: data } }
-              );
-            } else {
-              console.log(
-                "User email already exists in the join array for room:",
-                existingRoom.roomUniqueName
-              );
-            }
-          });
-        } catch (error) {
-          console.log(error);
-        }
-      });
-
-      socket.on("welcomeMessage", (room) => {
-        socket.join(room.room);
-        user.addUser(socket.id, room.room);
-        // console.log(room.room);
-        const userRoom = user.getUser(room.room);
-
-        if (userRoom) {
-          io.to(userRoom.room).emit(
-            "welcomeMessage",
-            `welcome to ${room.room} room`
-          );
-        } else {
-          console.log("User not found or missing room information.");
-        }
-      });
+      console.log(socket.id);
 
       socket.on("submitMessage", async (data) => {
         socket.join(data.room);

@@ -6,7 +6,7 @@ export interface ChatType extends Document {
   message_type: string;
   imgUrl: string;
   conversation_id: Schema.Types.ObjectId;
-  sent_datetime: string;
+  sent_datetime: Date;
 }
 
 const ChatSchema = new Schema<ChatType>({
@@ -15,7 +15,7 @@ const ChatSchema = new Schema<ChatType>({
   message_type: { required: true, type: String },
   imgUrl: { required: true, type: String },
   conversation_id: { type: Schema.Types.ObjectId, ref: "Conversation" },
-  sent_datetime: { type: String },
+  sent_datetime: { type: Date, default: Date.now },
 });
 
 export const ChatModel = mongoose.model<ChatType>("Chat", ChatSchema);

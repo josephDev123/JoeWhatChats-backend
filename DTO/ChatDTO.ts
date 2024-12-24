@@ -4,6 +4,6 @@ export interface ChatDTO {
   from_userId: string;
   message_type: string;
   imgUrl: string;
-  sent_datetime: string;
+  sent_datetime?: string;
   conversation_id: string;
 }
