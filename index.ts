@@ -1,4 +1,4 @@
-import express, { Express, Request, Response, NextFunction } from "express";
+import express, { Express } from "express";
 import { dbConnection } from "./db";
 import cors from "cors";
 import dotenv from "dotenv";
@@ -46,20 +46,20 @@ const startApp = async () => {
     io.on("connection", (socket) => {
       console.log(socket.id);
 
-      socket.on("submitMessage", async (data) => {
-        socket.join(data.room);
+      socket.on("joinConversation", async (data) => {
+        const { conversationId } = data;
+        socket.join(conversationId);
+        socket.emit("joinConversation", { conversationId });
+      });
 
-        const submittedChatData = {
-          name: data.name,
-          room: data.room,
-          chat: data.chat,
-          time: data.time,
-          img: data.img,
-        };
+      socket.on("sendMessage", ({ conversationId, message }) => {
+        io.to(conversationId).emit("receiveMessage", message);
 
-        io.to(data.room).emit("exchangeMessage", submittedChatData);
-        const chatMsg = new chatMsgModel(submittedChatData);
-        await chatMsg.save();
+        // Save the message to the database asynchronously
+        // const newMessage = new Message(message);
+        // newMessage.save().catch((error) => {
+        //   console.error("Error saving message:", error);
+        // });
       });
 
       socket.on("createPoll", async (data) => {

@@ -31,7 +31,7 @@ const ChatSchema = new mongoose_1.Schema({
     message_type: { required: true, type: String },
     imgUrl: { required: true, type: String },
     conversation_id: { type: mongoose_1.Schema.Types.ObjectId, ref: "Conversation" },
-    sent_datetime: { type: String },
+    sent_datetime: { type: Date, default: Date.now },
 });
 exports.ChatModel = mongoose_1.default.model("Chat", ChatSchema);
 //# sourceMappingURL=Chat.js.map

@@ -38,7 +38,7 @@ export class ChatController {
         queryPayload?.conversation_id!
       );
 
-      console.log(response);
+      // console.log(response);
       return res.status(200).json({ data: response });
     } catch (error) {
       const customError = error as GlobalError;

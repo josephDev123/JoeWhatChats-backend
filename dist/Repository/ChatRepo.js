@@ -84,6 +84,7 @@ class ChatRepo {
                     {
                         $group: {
                             _id: "$_id",
+                            conversation_name: { $first: "$conversation_name" },
                             GroupMembers: { $addToSet: "$GroupMembers" },
                             UserDetails: { $addToSet: { $arrayElemAt: ["$UserDetails", 0] } },
                         },

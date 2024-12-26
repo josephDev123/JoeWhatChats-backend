@@ -24,7 +24,7 @@ class ChatController {
                     message_type: payload.message_type,
                     imgUrl: payload.imgUrl,
                     conversation_id: payload.conversation_id,
-                    sent_datetime: payload.sent_datetime,
+                    // sent_datetime: payload.sent_datetime,
                 };
                 const result = yield this.ChatService.CreateChat(ExtractPayload);
                 // console.log(result);
@@ -45,7 +45,7 @@ class ChatController {
                 const query = req.query;
                 const queryPayload = query;
                 const response = yield this.ChatService.find(queryPayload === null || queryPayload === void 0 ? void 0 : queryPayload.conversation_id);
-                console.log(response);
+                // console.log(response);
                 return res.status(200).json({ data: response });
             }
             catch (error) {

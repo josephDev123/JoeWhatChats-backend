@@ -23,7 +23,6 @@ const http_1 = require("http");
 const User_1 = require("./utils/User");
 const chatMsg_1 = require("./models/chatMsg");
 const errorHandlerMiddleware_1 = require("./middleware/errorHandlerMiddleware");
-const rooms_1 = require("./models/rooms");
 const conversation_1 = require("./routes/Conversation/conversation");
 const Polling_1 = require("./models/Polling");
 const votePoll_1 = require("./routes/votePoll");
@@ -50,73 +49,20 @@ const startApp = () => __awaiter(void 0, void 0, void 0, function* () {
         yield (0, db_1.dbConnection)();
         // socketServer.io
         io.on("connection", (socket) => {
-            socket.on("offer", (data) => {
-                io.emit("offer", data);
-            });
-            socket.on("answer", (data) => {
-                io.emit("answer", data);
-            });
-            socket.on("iceCandidate", (data) => {
-                io.emit("iceCandidate", data);
-            });
-            socket.on("MemberJoined", (data) => {
-                io.emit("MemberJoined", data);
-            });
-            socket.on("createRoom", (roomOption) => __awaiter(void 0, void 0, void 0, function* () {
-                socket.join(roomOption.roomUniqueName);
-                io.to(roomOption.roomUniqueName).emit("getCreateRoom", roomOption);
-                const roomModelDb = new rooms_1.roomModel(roomOption);
-                yield roomModelDb.save();
+            console.log(socket.id);
+            socket.on("joinConversation", (data) => __awaiter(void 0, void 0, void 0, function* () {
+                const { conversationId } = data;
+                socket.join(conversationId);
+                socket.emit("joinConversation", { conversationId });
             }));
-            socket.on("JoinInviteRoom", (data) => __awaiter(void 0, void 0, void 0, function* () {
-                try {
-                    // await roomModel.updateOne(
-                    //   { roomUniqueName: data.roomUniqueName },
-                    //   { $addToSet: { join: data } }
-                    // );
-                    socket.join(data.roomUniqueName);
-                    const existingRooms = yield rooms_1.roomModel.find({
-                        roomUniqueName: data.roomUniqueName,
-                    });
-                    existingRooms.forEach((existingRoom) => __awaiter(void 0, void 0, void 0, function* () {
-                        const userEmailExists = existingRoom.join.some((joinData) => joinData.userEmail === data.userEmail);
-                        if (!userEmailExists) {
-                            yield rooms_1.roomModel.updateOne({ roomUniqueName: data.roomUniqueName }, { $addToSet: { join: data } });
-                        }
-                        else {
-                            console.log("User email already exists in the join array for room:", existingRoom.roomUniqueName);
-                        }
-                    }));
-                }
-                catch (error) {
-                    console.log(error);
-                }
-            }));
-            socket.on("welcomeMessage", (room) => {
-                socket.join(room.room);
-                user.addUser(socket.id, room.room);
-                // console.log(room.room);
-                const userRoom = user.getUser(room.room);
-                if (userRoom) {
-                    io.to(userRoom.room).emit("welcomeMessage", `welcome to ${room.room} room`);
-                }
-                else {
-                    console.log("User not found or missing room information.");
-                }
+            socket.on("sendMessage", ({ conversationId, message }) => {
+                io.to(conversationId).emit("receiveMessage", message);
+                // Save the message to the database asynchronously
+                // const newMessage = new Message(message);
+                // newMessage.save().catch((error) => {
+                //   console.error("Error saving message:", error);
+                // });
             });
-            socket.on("submitMessage", (data) => __awaiter(void 0, void 0, void 0, function* () {
-                socket.join(data.room);
-                const submittedChatData = {
-                    name: data.name,
-                    room: data.room,
-                    chat: data.chat,
-                    time: data.time,
-                    img: data.img,
-                };
-                io.to(data.room).emit("exchangeMessage", submittedChatData);
-                const chatMsg = new chatMsg_1.chatMsgModel(submittedChatData);
-                yield chatMsg.save();
-            }));
             socket.on("createPoll", (data) => __awaiter(void 0, void 0, void 0, function* () {
                 const idA = String(Math.floor(Math.random() * 1000));
                 const idB = String(Math.floor(Math.random() * 1000));
