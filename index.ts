@@ -149,7 +149,7 @@ const startApp = async () => {
       });
     });
 
-    // routes
+    // route
     app.use("/auth", AuthRoute);
     app.use("/conversation", Conversation);
     app.use("/chat", chatRoute);
