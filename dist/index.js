@@ -30,14 +30,14 @@ const Chat_1 = require("./routes/chat/Chat");
 const groupmember_1 = require("./routes/groupmembers/groupmember");
 dotenv_1.default.config();
 const corsOption = {
-    origin: "http://localhost:5173",
+    origin: process.env.ALLOWED_ORIGIN,
     credentials: true,
 };
 const app = (0, express_1.default)();
 const HttpServer = (0, http_1.createServer)(app);
 const io = new socket_io_1.Server(HttpServer, {
     cors: {
-        origin: "http://localhost:5173",
+        origin: process.env.ALLOWED_ORIGIN,
     },
 });
 app.use((0, cors_1.default)(corsOption));
@@ -140,7 +140,7 @@ const startApp = () => __awaiter(void 0, void 0, void 0, function* () {
                 }
             }));
         });
-        // routes
+        // route
         app.use("/auth", authRoute_1.AuthRoute);
         app.use("/conversation", conversation_1.Conversation);
         app.use("/chat", Chat_1.chatRoute);

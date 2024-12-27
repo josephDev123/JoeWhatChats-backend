@@ -21,7 +21,7 @@ import { GroupMemberRoute } from "./routes/groupmembers/groupmember";
 dotenv.config();
 
 const corsOption = {
-  origin: "http://localhost:5173",
+  origin: process.env.ALLOWED_ORIGIN,
   credentials: true,
 };
 
@@ -29,7 +29,7 @@ const app: Express = express();
 const HttpServer = createServer(app);
 const io = new Server(HttpServer, {
   cors: {
-    origin: "http://localhost:5173",
+    origin: process.env.ALLOWED_ORIGIN,
   },
 });
 

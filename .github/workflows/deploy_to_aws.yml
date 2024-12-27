@@ -54,7 +54,8 @@ jobs:
         run: |
           echo "PORT=${{ secrets.PORT }}" >> dist/.env
           echo "DATABASE_URL=${{ secrets.DATABASE_URL }}" >> dist/.env
-          echo "SECRET=${{ secrets.SECRET }}" >> dist/.env
+          echo "SECRET=${{ secrets.SECRET }}" >> dist/.env 
+          echo "SECRET=${{ secrets.ALLOWED_ORIGIN }}" >> dist/.env
 
       - name: change permission on .env content
         run: chmod 777 dist/.env
