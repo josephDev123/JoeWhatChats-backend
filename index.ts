@@ -25,6 +25,8 @@ const corsOption = {
   credentials: true,
 };
 
+console.log(`Allowed Origin: ${process.env.ALLOWED_ORIGIN}`);
+
 const app: Express = express();
 const HttpServer = createServer(app);
 const io = new Server(HttpServer, {
