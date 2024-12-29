@@ -176,7 +176,7 @@ export const loginController = async (req: Request, res: Response) => {
 
     res.cookie("token", token, {
       maxAge: 432000000,
-      secure: true,
+      secure: false,
       httpOnly: false,
       // sameSite: "lax",
     });
