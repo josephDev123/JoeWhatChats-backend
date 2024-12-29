@@ -175,9 +175,10 @@ export const loginController = async (req: Request, res: Response) => {
     const user = await UserModel.findOne({ email: email });
 
     res.cookie("token", token, {
-      maxAge: 300000,
+      maxAge: 432000000,
       secure: true,
       httpOnly: false,
+      sameSite: "lax",
     });
     // res.cookie("user", JSON.stringify(user));
 

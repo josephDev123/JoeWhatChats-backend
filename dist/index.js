@@ -145,8 +145,8 @@ const startApp = () => __awaiter(void 0, void 0, void 0, function* () {
         // route
         app.use("/auth", authRoute_1.AuthRoute);
         app.use("/conversation", authenticateToken_1.authenticateToken, conversation_1.Conversation);
-        app.use("/chat", Chat_1.chatRoute);
-        app.use("/group-member", groupmember_1.GroupMemberRoute);
+        app.use("/chat", authenticateToken_1.authenticateToken, Chat_1.chatRoute);
+        app.use("/group-member", authenticateToken_1.authenticateToken, groupmember_1.GroupMemberRoute);
         // app.use("/chat", chatMsgRoute);
         app.use("/vote", votePoll_1.VoteRouter);
         app.use(errorHandlerMiddleware_1.errorHandleMiddleware);

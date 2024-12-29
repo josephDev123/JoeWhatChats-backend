@@ -125,9 +125,10 @@ const loginController = (req, res) => __awaiter(void 0, void 0, void 0, function
         const token = yield (0, createToken_1.createToken)(email);
         const user = yield Users_1.UserModel.findOne({ email: email });
         res.cookie("token", token, {
-            maxAge: 300000,
+            maxAge: 432000000,
             secure: true,
             httpOnly: false,
+            sameSite: "lax",
         });
         // res.cookie("user", JSON.stringify(user));
         return res.json({
