@@ -178,7 +178,7 @@ export const loginController = async (req: Request, res: Response) => {
       maxAge: 432000000,
       secure: true,
       httpOnly: false,
-      sameSite: "lax",
+      // sameSite: "lax",
     });
     // res.cookie("user", JSON.stringify(user));
 
