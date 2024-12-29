@@ -11,7 +11,7 @@ export async function authenticateToken(
   try {
     // const tokenHeader = req.headers.cookie;
     // console.log("from cookie", tokenHeader);
-    const tokenHeader = req.cookies.token; // Access the token from cookies
+    const tokenHeader = await req.cookies.token; // Access the token from cookies
     console.log("from cookie2", tokenHeader);
 
     // const tokenHeader = req.headers.authorization;
