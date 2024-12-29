@@ -16,26 +16,18 @@ exports.authenticateToken = void 0;
 const VerifyToken_1 = __importDefault(require("../utils/VerifyToken"));
 const globalError_1 = require("../utils/globalError");
 function authenticateToken(req, res, next) {
-    var _a;
     return __awaiter(this, void 0, void 0, function* () {
         try {
-            const tokenHeader = req.headers.cookie;
+            // const tokenHeader = req.headers.cookie;
+            // console.log("from cookie", tokenHeader);
+            const tokenHeader = req.cookies.token; // Access the token from cookies
+            console.log("from cookie2", tokenHeader);
             // const tokenHeader = req.headers.authorization;
             if (!tokenHeader) {
-                throw new globalError_1.GlobalError("Missing authorization header", "AuthorizationError", 403, true);
-            }
-            const tokenParts = tokenHeader.split(" ");
-            // console.log(tokenParts);
-            // const [tokenCredential, user] = tokenParts;
-            const tokenCredential = tokenParts.filter((token) => token.startsWith("token"));
-            // console.log(tokenCredential);
-            let token = (_a = tokenCredential[0]) === null || _a === void 0 ? void 0 : _a.split("=")[1];
-            //check if token is present
-            if (!token) {
                 throw new globalError_1.GlobalError("token not provided", "TokenError", 403, true);
             }
             // verify the token
-            const verifyToken = yield (0, VerifyToken_1.default)(token ? token : "");
+            const verifyToken = yield (0, VerifyToken_1.default)(tokenHeader ? tokenHeader : "");
             next();
         }
         catch (error) {
@@ -48,7 +40,7 @@ function authenticateToken(req, res, next) {
                 throw new globalError_1.GlobalError("Json Web Token error/improper jwt structure", "TokenError", 403, true);
             }
             else {
-                throw new globalError_1.GlobalError("server internal error", "ServerError", 500, true);
+                throw new globalError_1.GlobalError("server internal error", "ServerError", 500, false);
             }
         }
     });

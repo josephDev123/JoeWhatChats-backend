@@ -128,7 +128,7 @@ const loginController = (req, res) => __awaiter(void 0, void 0, void 0, function
             maxAge: 432000000,
             secure: true,
             httpOnly: false,
-            sameSite: "lax",
+            // sameSite: "lax",
         });
         // res.cookie("user", JSON.stringify(user));
         return res.json({

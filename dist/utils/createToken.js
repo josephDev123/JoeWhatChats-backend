@@ -21,7 +21,7 @@ const createToken = (email) => __awaiter(void 0, void 0, void 0, function* () {
     return new Promise((resolve, reject) => {
         jsonwebtoken_1.default.sign(payload, process.env.SECRET, 
         // "kVt955sFd2UgVBZE3TaeifFUwE9VZFKX",
-        { expiresIn: "300000" }, (err, token) => {
+        { expiresIn: "432000000" }, (err, token) => {
             if (err) {
                 reject(err);
             }
