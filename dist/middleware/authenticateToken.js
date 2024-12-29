@@ -14,6 +14,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.authenticateToken = void 0;
 const VerifyToken_1 = __importDefault(require("../utils/VerifyToken"));
+const globalError_1 = require("../utils/globalError");
 function authenticateToken(req, res, next) {
     var _a;
     return __awaiter(this, void 0, void 0, function* () {
@@ -21,11 +22,7 @@ function authenticateToken(req, res, next) {
             const tokenHeader = req.headers.cookie;
             // const tokenHeader = req.headers.authorization;
             if (!tokenHeader) {
-                return res.status(403).json({
-                    error: true,
-                    showMessage: false,
-                    message: "Missing authorization header",
-                });
+                throw new globalError_1.GlobalError("Missing authorization header", "AuthorizationError", 403, true);
             }
             const tokenParts = tokenHeader.split(" ");
             // console.log(tokenParts);
@@ -33,46 +30,25 @@ function authenticateToken(req, res, next) {
             const tokenCredential = tokenParts.filter((token) => token.startsWith("token"));
             // console.log(tokenCredential);
             let token = (_a = tokenCredential[0]) === null || _a === void 0 ? void 0 : _a.split("=")[1];
-            // console.log(token);
-            // Here you can add code to validate the token, such as checking it against a database or decoding it.
             //check if token is present
             if (!token) {
-                return res.status(403).json({
-                    error: true,
-                    showMessage: false,
-                    message: "token not provided",
-                });
+                throw new globalError_1.GlobalError("token not provided", "TokenError", 403, true);
             }
             // verify the token
             const verifyToken = yield (0, VerifyToken_1.default)(token ? token : "");
-            // console.log(verifyToken);
-            // If the token is valid, you can proceed to the next middleware or the route handler.
-            // If the token is invalid, you can return a 401 response or handle it as needed.
             next();
         }
         catch (error) {
             // Handle any errors that occur within the try block here.
             console.log(error.message);
             if ((error === null || error === void 0 ? void 0 : error.message) === "jwt expired") {
-                return res.status(403).json({
-                    error: true,
-                    showMessage: false,
-                    message: "jwt expired",
-                });
+                throw new globalError_1.GlobalError("jwt expired", "TokenError", 403, true);
             }
             else if ((error === null || error === void 0 ? void 0 : error.message) === "jwt malformed") {
-                return res.status(403).json({
-                    error: true,
-                    showMessage: false,
-                    message: "Json Web Token error/improper jwt structure",
-                });
+                throw new globalError_1.GlobalError("Json Web Token error/improper jwt structure", "TokenError", 403, true);
             }
             else {
-                return res.status(500).json({
-                    error: true,
-                    showMessage: false,
-                    message: "server internal error",
-                });
+                throw new globalError_1.GlobalError("server internal error", "ServerError", 500, true);
             }
         }
     });

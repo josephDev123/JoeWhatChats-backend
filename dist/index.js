@@ -18,6 +18,7 @@ const cors_1 = __importDefault(require("cors"));
 const dotenv_1 = __importDefault(require("dotenv"));
 const authRoute_1 = require("./routes/auths/authRoute");
 const cookie_parser_1 = __importDefault(require("cookie-parser"));
+const authenticateToken_1 = require("./middleware/authenticateToken");
 const socket_io_1 = require("socket.io");
 const http_1 = require("http");
 const User_1 = require("./utils/User");
@@ -33,6 +34,7 @@ const corsOption = {
     origin: process.env.ALLOWED_ORIGIN,
     credentials: true,
 };
+console.log(`Allowed Origin: ${process.env.ALLOWED_ORIGIN}`);
 const app = (0, express_1.default)();
 const HttpServer = (0, http_1.createServer)(app);
 const io = new socket_io_1.Server(HttpServer, {
@@ -142,7 +144,7 @@ const startApp = () => __awaiter(void 0, void 0, void 0, function* () {
         });
         // route
         app.use("/auth", authRoute_1.AuthRoute);
-        app.use("/conversation", conversation_1.Conversation);
+        app.use("/conversation", authenticateToken_1.authenticateToken, conversation_1.Conversation);
         app.use("/chat", Chat_1.chatRoute);
         app.use("/group-member", groupmember_1.GroupMemberRoute);
         // app.use("/chat", chatMsgRoute);

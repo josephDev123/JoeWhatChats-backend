@@ -25,12 +25,13 @@ Object.defineProperty(exports, "__esModule", { value: true });
 //   });
 // }
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
+const globalError_1 = require("./globalError");
 function tokenIsVerify(token) {
     return __awaiter(this, void 0, void 0, function* () {
         return new Promise((resolve, reject) => {
             jsonwebtoken_1.default.verify(token, process.env.SECRET, (err, decoded) => {
                 if (err) {
-                    reject(new Error(err.message));
+                    reject(new globalError_1.GlobalError(err.message, err.name, 403, true));
                 }
                 else {
                     // console.log(decoded.data);

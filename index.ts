@@ -153,9 +153,9 @@ const startApp = async () => {
 
     // route
     app.use("/auth", AuthRoute);
-    app.use("/conversation", Conversation);
-    app.use("/chat", chatRoute);
-    app.use("/group-member", GroupMemberRoute);
+    app.use("/conversation", authenticateToken, Conversation);
+    app.use("/chat", authenticateToken, chatRoute);
+    app.use("/group-member", authenticateToken, GroupMemberRoute);
     // app.use("/chat", chatMsgRoute);
     app.use("/vote", VoteRouter);
     app.use(errorHandleMiddleware);
