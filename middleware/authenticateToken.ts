@@ -10,11 +10,12 @@ export async function authenticateToken(
 ) {
   try {
     const tokenHeader = req.headers.cookie;
+    console.log("from cookie", tokenHeader);
     // const tokenHeader = req.headers.authorization;
 
     if (!tokenHeader) {
       throw new GlobalError(
-        "Missing authorization header",
+        "Missing cookie header",
         "AuthorizationError",
         403,
         true
@@ -53,7 +54,7 @@ export async function authenticateToken(
         true
       );
     } else {
-      throw new GlobalError("server internal error", "ServerError", 500, true);
+      throw new GlobalError("server internal error", "ServerError", 500, false);
     }
   }
 }
