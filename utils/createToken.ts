@@ -9,7 +9,7 @@ export const createToken = async (email: any) => {
       payload,
       process.env.SECRET as string,
       // "kVt955sFd2UgVBZE3TaeifFUwE9VZFKX",
-      { expiresIn: "300000" },
+      { expiresIn: "432000000" },
 
       (err: any, token: any) => {
         if (err) {
