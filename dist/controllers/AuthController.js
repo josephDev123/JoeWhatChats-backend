@@ -126,7 +126,7 @@ const loginController = (req, res) => __awaiter(void 0, void 0, void 0, function
         const user = yield Users_1.UserModel.findOne({ email: email });
         res.cookie("token", token, {
             maxAge: 432000000,
-            secure: process.env.NODE_ENV === "production",
+            secure: false,
             httpOnly: true,
             sameSite: "lax",
         });
