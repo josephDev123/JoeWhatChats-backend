@@ -2,6 +2,7 @@ import mongoose, { Model } from "mongoose";
 import { ConversationType } from "../models/Conversation";
 import { ConversationDTO } from "../DTO/conversationDTO";
 import { GlobalError } from "../utils/globalError";
+// import { UpdateConversationDTO } from "../DTO/UpdateConversationDTO";
 
 export class ConversationRepo {
   constructor(private readonly ConversationModel: Model<ConversationType>) {}
@@ -13,6 +14,28 @@ export class ConversationRepo {
     try {
       const ConversationDocs = new this.ConversationModel(payload);
       return await ConversationDocs.save({ session });
+    } catch (error) {
+      const CustomError = error as GlobalError;
+      throw new GlobalError(
+        CustomError.name,
+        CustomError.message,
+        CustomError.statusCode,
+        CustomError.operational,
+        CustomError.stack
+      );
+    }
+  }
+  async update(id: string, payload: ConversationDTO) {
+    try {
+      const findIdResponse = await this.ConversationModel.findById(id);
+      const doc: ConversationDTO = {
+        conversation_name:
+          payload.conversation_name || findIdResponse?.conversation_name,
+        avatar: payload.avatar || findIdResponse?.avatar,
+      };
+      return await this.ConversationModel.findByIdAndUpdate(id, doc, {
+        new: true,
+      });
     } catch (error) {
       const CustomError = error as GlobalError;
       throw new GlobalError(
@@ -53,6 +76,8 @@ export class ConversationRepo {
           $group: {
             _id: "$_id",
             conversation_name: { $first: "$conversation_name" },
+            avatar: { $first: "$avatar" },
+            creator: { $first: "$creator" },
             ConversationWithMember: { $push: "$ConversationWithMember" },
           },
         },

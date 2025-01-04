@@ -9,9 +9,7 @@ import { Server } from "socket.io";
 import { createServer } from "http";
 import { User } from "./utils/User";
 import { chatMsgModel } from "./models/chatMsg";
-import { chatMsgRoute } from "./routes/chat/chatMsg";
 import { errorHandleMiddleware } from "./middleware/errorHandlerMiddleware";
-import { roomModel } from "./models/rooms";
 import { Conversation } from "./routes/Conversation/conversation";
 import { PollModel } from "./models/Polling";
 import { VoteRouter } from "./routes/votePoll";
@@ -21,7 +19,6 @@ import { ChatRepo } from "./Repository/ChatRepo";
 import { ChatModel } from "./models/Chat";
 import { ConversationModel } from "./models/Conversation";
 import { ChatService } from "./services/ChatService";
-import { ChatController } from "./controllers/ChatController";
 import { ChatDTO } from "./DTO/ChatDTO";
 
 dotenv.config();
@@ -49,9 +46,8 @@ const startApp = async () => {
   try {
     const ChatRepoImpl = new ChatRepo(ChatModel, ConversationModel);
     const ChatServiceImpl = new ChatService(ChatRepoImpl);
-    // const ChatControllerImp = new ChatController(ChatServiceImpl);
 
-    const user = new User();
+    // const user = new User();
     await dbConnection();
 
     // socketServer.io

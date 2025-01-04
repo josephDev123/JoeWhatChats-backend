@@ -31,6 +31,11 @@ Conversation.post(
   ConversationControllerImp.create_single.bind(ConversationControllerImp)
 );
 
+Conversation.put(
+  "/update-group",
+  ConversationControllerImp.update.bind(ConversationControllerImp)
+);
+
 Conversation.get(
   "/",
   ConversationControllerImp.find.bind(ConversationControllerImp)

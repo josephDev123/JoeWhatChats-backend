@@ -4,6 +4,7 @@ import { GlobalError } from "../utils/globalError";
 import { GroupMemberRepo } from "../Repository/GroupMember";
 import { GroupMemberTypeDTO } from "../DTO/GroupMemberDTO";
 import mongoose, { Mongoose, Schema } from "mongoose";
+// import { UpdateConversationDTO } from "../DTO/UpdateConversationDTO";
 
 export class ConversationService {
   constructor(
@@ -105,6 +106,22 @@ export class ConversationService {
       );
     } finally {
       await session.endSession();
+    }
+  }
+
+  async update(id: string, payload: ConversationDTO) {
+    try {
+      const response = await this.ConversationRepo.update(id, payload);
+      return response;
+    } catch (error) {
+      const ErrorFormat = error as GlobalError;
+      throw new GlobalError(
+        ErrorFormat.message,
+        ErrorFormat.name,
+        ErrorFormat.statusCode,
+        ErrorFormat.operational,
+        ErrorFormat.stack
+      );
     }
   }
 

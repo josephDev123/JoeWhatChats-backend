@@ -10,6 +10,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.ConversationController = void 0;
+// import { UpdateConversationDTO } from "../DTO/UpdateConversationDTO";
 class ConversationController {
     constructor(ConversationService) {
         this.ConversationService = ConversationService;
@@ -43,6 +44,24 @@ class ConversationController {
             }
             catch (error) {
                 next(error);
+            }
+        });
+    }
+    update(req, res, next) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const payloadBody = req.body;
+                const payloadId = payloadBody.conversation_id;
+                const payload = {
+                    conversation_name: payloadBody.conversation_name,
+                    avatar: payloadBody.conversation_avatar,
+                };
+                const result = yield this.ConversationService.update(payloadId, payload);
+                return res.json(result).status(200);
+            }
+            catch (error) {
+                const ErrorFormat = error;
+                next(ErrorFormat);
             }
         });
     }

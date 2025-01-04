@@ -2,6 +2,7 @@ import { NextFunction, Request, Response } from "express";
 import { ConversationService } from "../services/Conversation";
 import { ConversationDTO } from "../DTO/conversationDTO";
 import { GlobalError } from "../utils/globalError";
+// import { UpdateConversationDTO } from "../DTO/UpdateConversationDTO";
 
 export class ConversationController {
   constructor(private readonly ConversationService: ConversationService) {}
@@ -38,6 +39,22 @@ export class ConversationController {
       return res.json(result).status(200);
     } catch (error) {
       next(error);
+    }
+  }
+
+  async update(req: Request, res: Response, next: NextFunction) {
+    try {
+      const payloadBody = req.body;
+      const payloadId: string = payloadBody.conversation_id;
+      const payload: ConversationDTO = {
+        conversation_name: payloadBody.conversation_name,
+        avatar: payloadBody.conversation_avatar,
+      };
+      const result = await this.ConversationService.update(payloadId, payload);
+      return res.json(result).status(200);
+    } catch (error) {
+      const ErrorFormat = error as GlobalError;
+      next(ErrorFormat);
     }
   }
 

@@ -15,6 +15,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.ConversationRepo = void 0;
 const mongoose_1 = __importDefault(require("mongoose"));
 const globalError_1 = require("../utils/globalError");
+// import { UpdateConversationDTO } from "../DTO/UpdateConversationDTO";
 class ConversationRepo {
     constructor(ConversationModel) {
         this.ConversationModel = ConversationModel;
@@ -24,6 +25,24 @@ class ConversationRepo {
             try {
                 const ConversationDocs = new this.ConversationModel(payload);
                 return yield ConversationDocs.save({ session });
+            }
+            catch (error) {
+                const CustomError = error;
+                throw new globalError_1.GlobalError(CustomError.name, CustomError.message, CustomError.statusCode, CustomError.operational, CustomError.stack);
+            }
+        });
+    }
+    update(id, payload) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const findIdResponse = yield this.ConversationModel.findById(id);
+                const doc = {
+                    conversation_name: payload.conversation_name || (findIdResponse === null || findIdResponse === void 0 ? void 0 : findIdResponse.conversation_name),
+                    avatar: payload.avatar || (findIdResponse === null || findIdResponse === void 0 ? void 0 : findIdResponse.avatar),
+                };
+                return yield this.ConversationModel.findByIdAndUpdate(id, doc, {
+                    new: true,
+                });
             }
             catch (error) {
                 const CustomError = error;
@@ -59,6 +78,8 @@ class ConversationRepo {
                         $group: {
                             _id: "$_id",
                             conversation_name: { $first: "$conversation_name" },
+                            avatar: { $first: "$avatar" },
+                            creator: { $first: "$creator" },
                             ConversationWithMember: { $push: "$ConversationWithMember" },
                         },
                     },

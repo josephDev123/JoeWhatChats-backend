@@ -20,7 +20,6 @@ const authRoute_1 = require("./routes/auths/authRoute");
 const cookie_parser_1 = __importDefault(require("cookie-parser"));
 const socket_io_1 = require("socket.io");
 const http_1 = require("http");
-const User_1 = require("./utils/User");
 const chatMsg_1 = require("./models/chatMsg");
 const errorHandlerMiddleware_1 = require("./middleware/errorHandlerMiddleware");
 const conversation_1 = require("./routes/Conversation/conversation");
@@ -52,8 +51,7 @@ const startApp = () => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const ChatRepoImpl = new ChatRepo_1.ChatRepo(Chat_2.ChatModel, Conversation_1.ConversationModel);
         const ChatServiceImpl = new ChatService_1.ChatService(ChatRepoImpl);
-        // const ChatControllerImp = new ChatController(ChatServiceImpl);
-        const user = new User_1.User();
+        // const user = new User();
         yield (0, db_1.dbConnection)();
         // socketServer.io
         io.on("connection", (socket) => {

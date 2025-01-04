@@ -26,6 +26,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.ConversationModel = void 0;
 const mongoose_1 = __importStar(require("mongoose"));
 const ConversationSchema = new mongoose_1.Schema({
+    creator: { type: mongoose_1.Schema.Types.ObjectId, ref: "User" },
+    avatar: String,
     conversation_name: String,
 });
 exports.ConversationModel = mongoose_1.default.model("Conversation", ConversationSchema);

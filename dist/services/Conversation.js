@@ -15,6 +15,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.ConversationService = void 0;
 const globalError_1 = require("../utils/globalError");
 const mongoose_1 = __importDefault(require("mongoose"));
+// import { UpdateConversationDTO } from "../DTO/UpdateConversationDTO";
 class ConversationService {
     constructor(ConversationRepo, GroupMember) {
         this.ConversationRepo = ConversationRepo;
@@ -92,6 +93,18 @@ class ConversationService {
             }
             finally {
                 yield session.endSession();
+            }
+        });
+    }
+    update(id, payload) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const response = yield this.ConversationRepo.update(id, payload);
+                return response;
+            }
+            catch (error) {
+                const ErrorFormat = error;
+                throw new globalError_1.GlobalError(ErrorFormat.message, ErrorFormat.name, ErrorFormat.statusCode, ErrorFormat.operational, ErrorFormat.stack);
             }
         });
     }
