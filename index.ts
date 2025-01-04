@@ -17,6 +17,12 @@ import { PollModel } from "./models/Polling";
 import { VoteRouter } from "./routes/votePoll";
 import { chatRoute } from "./routes/chat/Chat";
 import { GroupMemberRoute } from "./routes/groupmembers/groupmember";
+import { ChatRepo } from "./Repository/ChatRepo";
+import { ChatModel } from "./models/Chat";
+import { ConversationModel } from "./models/Conversation";
+import { ChatService } from "./services/ChatService";
+import { ChatController } from "./controllers/ChatController";
+import { ChatDTO } from "./DTO/ChatDTO";
 
 dotenv.config();
 
@@ -41,6 +47,10 @@ app.use(cookieParser());
 
 const startApp = async () => {
   try {
+    const ChatRepoImpl = new ChatRepo(ChatModel, ConversationModel);
+    const ChatServiceImpl = new ChatService(ChatRepoImpl);
+    // const ChatControllerImp = new ChatController(ChatServiceImpl);
+
     const user = new User();
     await dbConnection();
 
@@ -54,14 +64,19 @@ const startApp = async () => {
         socket.emit("joinConversation", { conversationId });
       });
 
-      socket.on("sendMessage", ({ conversationId, message }) => {
+      socket.on("sendMessage", async ({ conversationId, message }) => {
         io.to(conversationId).emit("receiveMessage", message);
 
-        // Save the message to the database asynchronously
-        // const newMessage = new Message(message);
-        // newMessage.save().catch((error) => {
-        //   console.error("Error saving message:", error);
-        // });
+        // Save to db
+        const chatToDb: ChatDTO = {
+          message_text: message.message_text,
+          from_userId: message.from_userId,
+          message_type: message.message_type,
+          imgUrl: message.imgUrl,
+          conversation_id: message.conversation_id,
+        };
+
+        await ChatServiceImpl.CreateChat(chatToDb);
       });
 
       socket.on("createPoll", async (data) => {

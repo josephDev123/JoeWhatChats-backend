@@ -18,7 +18,6 @@ const cors_1 = __importDefault(require("cors"));
 const dotenv_1 = __importDefault(require("dotenv"));
 const authRoute_1 = require("./routes/auths/authRoute");
 const cookie_parser_1 = __importDefault(require("cookie-parser"));
-const authenticateToken_1 = require("./middleware/authenticateToken");
 const socket_io_1 = require("socket.io");
 const http_1 = require("http");
 const User_1 = require("./utils/User");
@@ -29,6 +28,10 @@ const Polling_1 = require("./models/Polling");
 const votePoll_1 = require("./routes/votePoll");
 const Chat_1 = require("./routes/chat/Chat");
 const groupmember_1 = require("./routes/groupmembers/groupmember");
+const ChatRepo_1 = require("./Repository/ChatRepo");
+const Chat_2 = require("./models/Chat");
+const Conversation_1 = require("./models/Conversation");
+const ChatService_1 = require("./services/ChatService");
 dotenv_1.default.config();
 const corsOption = {
     origin: process.env.ALLOWED_ORIGIN,
@@ -47,6 +50,9 @@ app.use(express_1.default.json());
 app.use((0, cookie_parser_1.default)());
 const startApp = () => __awaiter(void 0, void 0, void 0, function* () {
     try {
+        const ChatRepoImpl = new ChatRepo_1.ChatRepo(Chat_2.ChatModel, Conversation_1.ConversationModel);
+        const ChatServiceImpl = new ChatService_1.ChatService(ChatRepoImpl);
+        // const ChatControllerImp = new ChatController(ChatServiceImpl);
         const user = new User_1.User();
         yield (0, db_1.dbConnection)();
         // socketServer.io
@@ -57,14 +63,18 @@ const startApp = () => __awaiter(void 0, void 0, void 0, function* () {
                 socket.join(conversationId);
                 socket.emit("joinConversation", { conversationId });
             }));
-            socket.on("sendMessage", ({ conversationId, message }) => {
+            socket.on("sendMessage", ({ conversationId, message }) => __awaiter(void 0, void 0, void 0, function* () {
                 io.to(conversationId).emit("receiveMessage", message);
-                // Save the message to the database asynchronously
-                // const newMessage = new Message(message);
-                // newMessage.save().catch((error) => {
-                //   console.error("Error saving message:", error);
-                // });
-            });
+                // Save to db
+                const chatToDb = {
+                    message_text: message.message_text,
+                    from_userId: message.from_userId,
+                    message_type: message.message_type,
+                    imgUrl: message.imgUrl,
+                    conversation_id: message.conversation_id,
+                };
+                yield ChatServiceImpl.CreateChat(chatToDb);
+            }));
             socket.on("createPoll", (data) => __awaiter(void 0, void 0, void 0, function* () {
                 const idA = String(Math.floor(Math.random() * 1000));
                 const idB = String(Math.floor(Math.random() * 1000));
@@ -144,9 +154,9 @@ const startApp = () => __awaiter(void 0, void 0, void 0, function* () {
         });
         // route
         app.use("/auth", authRoute_1.AuthRoute);
-        app.use("/conversation", authenticateToken_1.authenticateToken, conversation_1.Conversation);
-        app.use("/chat", authenticateToken_1.authenticateToken, Chat_1.chatRoute);
-        app.use("/group-member", authenticateToken_1.authenticateToken, groupmember_1.GroupMemberRoute);
+        app.use("/conversation", conversation_1.Conversation);
+        app.use("/chat", Chat_1.chatRoute);
+        app.use("/group-member", groupmember_1.GroupMemberRoute);
         // app.use("/chat", chatMsgRoute);
         app.use("/vote", votePoll_1.VoteRouter);
         app.use(errorHandlerMiddleware_1.errorHandleMiddleware);

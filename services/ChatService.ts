@@ -1,7 +1,5 @@
-import { Model } from "mongoose";
 import { ChatDTO } from "../DTO/ChatDTO";
 import { GlobalError } from "../utils/globalError";
-import { ChatType } from "../models/Chat";
 import { ChatRepo } from "../Repository/ChatRepo";
 
 export class ChatService {

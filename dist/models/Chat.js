@@ -29,7 +29,7 @@ const ChatSchema = new mongoose_1.Schema({
     message_text: { type: String },
     from_userId: { type: mongoose_1.default.Schema.Types.ObjectId, ref: "User" },
     message_type: { required: true, type: String },
-    imgUrl: { required: true, type: String },
+    imgUrl: { type: String },
     conversation_id: { type: mongoose_1.Schema.Types.ObjectId, ref: "Conversation" },
     sent_datetime: { type: Date, default: Date.now },
 });

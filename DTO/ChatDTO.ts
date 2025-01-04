@@ -3,7 +3,7 @@ export interface ChatDTO {
   message_text: string;
   from_userId: string;
   message_type: string;
-  imgUrl: string;
+  imgUrl?: string;
   sent_datetime?: string;
   conversation_id: string;
 }
