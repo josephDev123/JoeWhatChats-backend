@@ -10,6 +10,7 @@ export class ConversationController {
     try {
       const payload = req.body;
       const ExtractPayload: ConversationDTO = {
+        creator: payload.creator,
         conversation_name: payload.conversation_name,
       };
       console.log(ExtractPayload);
