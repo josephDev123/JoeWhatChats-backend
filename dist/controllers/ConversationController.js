@@ -82,6 +82,19 @@ class ConversationController {
             }
         });
     }
+    findBy(req, res, next) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const conversation_id = req.params.id;
+                const response = yield this.ConversationService.findBy(conversation_id);
+                return res.json({ data: response }).status(200);
+            }
+            catch (error) {
+                const ErrorFormat = error;
+                next(ErrorFormat);
+            }
+        });
+    }
 }
 exports.ConversationController = ConversationController;
 //# sourceMappingURL=ConversationController.js.map

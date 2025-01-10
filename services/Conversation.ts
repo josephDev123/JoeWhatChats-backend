@@ -134,4 +134,14 @@ export class ConversationService {
       throw new GlobalError(ErrorFormat.message, ErrorFormat.name, 400, false);
     }
   }
+
+  async findBy(conversation_id: string) {
+    try {
+      const response = await this.ConversationRepo.findBy(conversation_id);
+      return response;
+    } catch (error) {
+      const ErrorFormat = error as GlobalError;
+      throw new GlobalError(ErrorFormat.message, ErrorFormat.name, 400, false);
+    }
+  }
 }

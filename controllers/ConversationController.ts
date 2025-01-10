@@ -71,4 +71,17 @@ export class ConversationController {
       next(ErrorFormat);
     }
   }
+
+  async findBy(req: Request, res: Response, next: NextFunction) {
+    try {
+      const conversation_id = req.params.id;
+      const response = await this.ConversationService.findBy(
+        conversation_id! as unknown as string
+      );
+      return res.json({ data: response }).status(200);
+    } catch (error) {
+      const ErrorFormat = error as GlobalError;
+      next(ErrorFormat);
+    }
+  }
 }

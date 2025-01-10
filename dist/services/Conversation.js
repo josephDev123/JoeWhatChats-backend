@@ -120,6 +120,18 @@ class ConversationService {
             }
         });
     }
+    findBy(conversation_id) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const response = yield this.ConversationRepo.findBy(conversation_id);
+                return response;
+            }
+            catch (error) {
+                const ErrorFormat = error;
+                throw new globalError_1.GlobalError(ErrorFormat.message, ErrorFormat.name, 400, false);
+            }
+        });
+    }
 }
 exports.ConversationService = ConversationService;
 //# sourceMappingURL=Conversation.js.map

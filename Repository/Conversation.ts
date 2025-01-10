@@ -1,4 +1,4 @@
-import mongoose, { Model } from "mongoose";
+import mongoose, { Model, Mongoose, Schema } from "mongoose";
 import { ConversationType } from "../models/Conversation";
 import { ConversationDTO } from "../DTO/conversationDTO";
 import { GlobalError } from "../utils/globalError";
@@ -83,6 +83,53 @@ export class ConversationRepo {
         },
         { $skip: skip },
         { $limit: limit },
+      ];
+
+      const response = await this.ConversationModel.aggregate(
+        ConversationAndMemberGroup
+      );
+
+      return response;
+    } catch (error) {
+      const ErrorFormat = error as GlobalError;
+      throw new GlobalError(ErrorFormat.message, ErrorFormat.name, 400, false);
+    }
+  }
+
+  async findBy(conversation_id: string) {
+    try {
+      const ConversationAndMemberGroup = [
+        {
+          $match: { _id: new mongoose.Types.ObjectId(conversation_id) },
+        },
+        {
+          $lookup: {
+            from: "groupmembers",
+            localField: "_id",
+            foreignField: "conversation_id",
+            as: "ConversationWithMember",
+          },
+        },
+        {
+          $unwind: "$ConversationWithMember", // Flatten the array for easier lookup
+        },
+        {
+          $lookup: {
+            from: "users", // Join with the users collection
+            localField: "ConversationWithMember.user_id", // Assuming `user_id` is the field in groupmembers pointing to users
+            foreignField: "_id",
+            as: "ConversationWithMember.userDetails",
+          },
+        },
+        {
+          $group: {
+            _id: "$_id",
+            conversation_name: { $first: "$conversation_name" },
+            avatar: { $first: "$avatar" },
+            creator: { $first: "$creator" },
+            ConversationWithMember: { $push: "$ConversationWithMember" },
+          },
+        },
       ];
 
       const response = await this.ConversationModel.aggregate(

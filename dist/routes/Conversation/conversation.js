@@ -28,6 +28,7 @@ exports.Conversation.post("/create", ConversationControllerImp.create.bind(Conve
 exports.Conversation.post("/create-single", ConversationControllerImp.create_single.bind(ConversationControllerImp));
 exports.Conversation.put("/update-group", ConversationControllerImp.update.bind(ConversationControllerImp));
 exports.Conversation.get("/", ConversationControllerImp.find.bind(ConversationControllerImp));
+exports.Conversation.get("/:id", ConversationControllerImp.findBy.bind(ConversationControllerImp));
 //old route
 exports.Conversation.get("/:email", function (req, res, next) {
     return __awaiter(this, void 0, void 0, function* () {

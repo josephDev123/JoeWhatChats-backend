@@ -95,6 +95,51 @@ class ConversationRepo {
             }
         });
     }
+    findBy(conversation_id) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const ConversationAndMemberGroup = [
+                    {
+                        $match: { _id: new mongoose_1.default.Types.ObjectId(conversation_id) },
+                    },
+                    {
+                        $lookup: {
+                            from: "groupmembers",
+                            localField: "_id",
+                            foreignField: "conversation_id",
+                            as: "ConversationWithMember",
+                        },
+                    },
+                    {
+                        $unwind: "$ConversationWithMember", // Flatten the array for easier lookup
+                    },
+                    {
+                        $lookup: {
+                            from: "users",
+                            localField: "ConversationWithMember.user_id",
+                            foreignField: "_id",
+                            as: "ConversationWithMember.userDetails",
+                        },
+                    },
+                    {
+                        $group: {
+                            _id: "$_id",
+                            conversation_name: { $first: "$conversation_name" },
+                            avatar: { $first: "$avatar" },
+                            creator: { $first: "$creator" },
+                            ConversationWithMember: { $push: "$ConversationWithMember" },
+                        },
+                    },
+                ];
+                const response = yield this.ConversationModel.aggregate(ConversationAndMemberGroup);
+                return response;
+            }
+            catch (error) {
+                const ErrorFormat = error;
+                throw new globalError_1.GlobalError(ErrorFormat.message, ErrorFormat.name, 400, false);
+            }
+        });
+    }
     find_singleMember(user_id, user_id2) {
         return __awaiter(this, void 0, void 0, function* () {
             console.log(user_id, user_id2);

@@ -41,6 +41,11 @@ Conversation.get(
   ConversationControllerImp.find.bind(ConversationControllerImp)
 );
 
+Conversation.get(
+  "/:id",
+  ConversationControllerImp.findBy.bind(ConversationControllerImp)
+);
+
 //old route
 
 Conversation.get(
