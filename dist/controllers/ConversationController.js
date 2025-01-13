@@ -55,7 +55,7 @@ class ConversationController {
                 const payloadId = payloadBody.conversation_id;
                 const payload = {
                     conversation_name: payloadBody.conversation_name,
-                    avatar: payloadBody.conversation_avatar,
+                    avatar: payloadBody.avatar,
                 };
                 const result = yield this.ConversationService.update(payloadId, payload);
                 return res.json(result).status(200);
@@ -86,6 +86,7 @@ class ConversationController {
         return __awaiter(this, void 0, void 0, function* () {
             try {
                 const conversation_id = req.params.id;
+                // console.log("conv id", conversation_id);
                 const response = yield this.ConversationService.findBy(conversation_id);
                 return res.json({ data: response }).status(200);
             }

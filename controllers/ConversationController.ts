@@ -49,8 +49,9 @@ export class ConversationController {
       const payloadId: string = payloadBody.conversation_id;
       const payload: ConversationDTO = {
         conversation_name: payloadBody.conversation_name,
-        avatar: payloadBody.conversation_avatar,
+        avatar: payloadBody.avatar,
       };
+
       const result = await this.ConversationService.update(payloadId, payload);
       return res.json(result).status(200);
     } catch (error) {
@@ -75,6 +76,7 @@ export class ConversationController {
   async findBy(req: Request, res: Response, next: NextFunction) {
     try {
       const conversation_id = req.params.id;
+      // console.log("conv id", conversation_id);
       const response = await this.ConversationService.findBy(
         conversation_id! as unknown as string
       );
