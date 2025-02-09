@@ -1,6 +1,6 @@
 ## JoeWhatChats
 
-Welcome to the JoeWhatChats! This project aims to replicate the functionality of WhatsApp, allowing users to create Conversation, send messages, using Node.js, Express, MongoDB, React, and Socket.IO.
+Welcome to the LetWhatChats! This project aims to replicate the functionality of WhatsApp, allowing users to create Conversation, send messages, using Node.js, Express, MongoDB, React, and Socket.IO.
 
 ## Features
 
@@ -21,17 +21,7 @@ Welcome to the JoeWhatChats! This project aims to replicate the functionality of
 </li> -->
 <ul>
 
-## Samples
-
-### large screen version
-
-<img src="./client/src/assets/chat_sample.png" loading="lazy" alt="large screen sample" />
-
-### small screen version
-
-<img src="./client/src/assets/mobile_chat_sample.png" loading="lazy" alt="large screen sample" />
-
-## Technologies Used
+## Backend Technologies Used
 
 <ul>
 <li>
@@ -42,7 +32,7 @@ Welcome to the JoeWhatChats! This project aims to replicate the functionality of
 </li>
 
 <li>
-<b>React:</b>  Frontend development for creating a user-friendly interface.
+<b>Typescript:</b> 
 </li>
 
 <li>
@@ -50,48 +40,35 @@ Welcome to the JoeWhatChats! This project aims to replicate the functionality of
 </li>
 
 <li>
-<b>HTML & CSS: </b>   Designing and styling the application to resemble WhatsApp's familiar interface.
+<b>AWS EC2:</b>  Deployment Server
+</li>
+
+<li>
+<b>Github Action </b>   for CI/CD
 </li>
 <ul>
 
 ## Installation
 
 1. Clone the repository:
-   `git clone https://github.com/yourusername/whatsapp-clone.git`
+   `(https://github.com/josephDev123/JoeWhatChats-backend.git)`
 
 2. Install dependencies for the backend:
-   `cd backend 
-    npm install
-`
+   `    npm install`
 
 3. Install dependencies for the frontend:
-   `cd client
-    npm install
-`
+   `    npm install`
 
 4. Set up environment variables:
 
-Create a .env file in the backend directory.
-Add MongoDB connection URI, JWT secret, and other necessary variables.
+Create a .env file in the root directory. follow the .env.example guideline
 
 5. Start the backend server:
-   `cd backend
-    npm start
-`
+   ` npm start`
 
-6. Start the frontend development server:
-   `cd frontend
-    npm start
-`
+## Deployment
 
-## Usage
-
-<ol>
-<li>Sign up or log in to your account.</li>
-<li>Create a new Conversation or join an existing one.</li>
-<li>Start sending and receiving messages in real-time.</li>
-<!-- <li>Stay tuned for the upcoming video call feature!</li> -->
-</ol>
+AWS EC2
 
 ## Credits
 
