@@ -23,22 +23,37 @@ import { ChatDTO } from "./DTO/ChatDTO";
 
 dotenv.config();
 
-const corsOption = {
-  origin: process.env.ALLOWED_ORIGIN,
-  credentials: true,
-};
-
-console.log(`Allowed Origin: ${process.env.ALLOWED_ORIGIN}`);
+// const corsOption = {
+//   origin: process.env.ALLOWED_ORIGIN,
+//   credentials: true,
+// };
 
 const app: Express = express();
 const HttpServer = createServer(app);
+const DomainOrigin = [
+  process.env.ALLOWED_ORIGIN,
+  process.env.ALLOWED_ORIGIN2,
+  process.env.ALLOWED_ORIGIN3,
+].filter((origin): origin is string => typeof origin === "string");
+
 const io = new Server(HttpServer, {
   cors: {
-    origin: process.env.ALLOWED_ORIGIN,
+    origin: DomainOrigin,
   },
 });
 
-app.use(cors(corsOption));
+app.use(
+  cors({
+    origin: function (origin, callback) {
+      if (!origin || DomainOrigin.includes(origin)) {
+        callback(null, true);
+      } else {
+        callback(new Error("Not allowed by CORS"));
+      }
+    },
+    credentials: true,
+  })
+);
 app.use(express.json());
 app.use(cookieParser());
 
@@ -169,6 +184,7 @@ const startApp = async () => {
     app.use("/group-member", GroupMemberRoute);
     // app.use("/chat", chatMsgRoute);
     app.use("/vote", VoteRouter);
+    app.use("/test", (req, res) => res.send("testing ..."));
     app.use(errorHandleMiddleware);
     HttpServer.listen(process.env.PORT, () => {
       console.log(`listening on port ${process.env.PORT}`);

@@ -32,19 +32,33 @@ const Chat_2 = require("./models/Chat");
 const Conversation_1 = require("./models/Conversation");
 const ChatService_1 = require("./services/ChatService");
 dotenv_1.default.config();
-const corsOption = {
-    origin: process.env.ALLOWED_ORIGIN,
-    credentials: true,
-};
-console.log(`Allowed Origin: ${process.env.ALLOWED_ORIGIN}`);
+// const corsOption = {
+//   origin: process.env.ALLOWED_ORIGIN,
+//   credentials: true,
+// };
 const app = (0, express_1.default)();
 const HttpServer = (0, http_1.createServer)(app);
+const DomainOrigin = [
+    process.env.ALLOWED_ORIGIN,
+    process.env.ALLOWED_ORIGIN2,
+    process.env.ALLOWED_ORIGIN3,
+].filter((origin) => typeof origin === "string");
 const io = new socket_io_1.Server(HttpServer, {
     cors: {
-        origin: process.env.ALLOWED_ORIGIN,
+        origin: DomainOrigin,
     },
 });
-app.use((0, cors_1.default)(corsOption));
+app.use((0, cors_1.default)({
+    origin: function (origin, callback) {
+        if (!origin || DomainOrigin.includes(origin)) {
+            callback(null, true);
+        }
+        else {
+            callback(new Error("Not allowed by CORS"));
+        }
+    },
+    credentials: true,
+}));
 app.use(express_1.default.json());
 app.use((0, cookie_parser_1.default)());
 const startApp = () => __awaiter(void 0, void 0, void 0, function* () {
@@ -157,6 +171,7 @@ const startApp = () => __awaiter(void 0, void 0, void 0, function* () {
         app.use("/group-member", groupmember_1.GroupMemberRoute);
         // app.use("/chat", chatMsgRoute);
         app.use("/vote", votePoll_1.VoteRouter);
+        app.use("/test", (req, res) => res.send("testing ..."));
         app.use(errorHandlerMiddleware_1.errorHandleMiddleware);
         HttpServer.listen(process.env.PORT, () => {
             console.log(`listening on port ${process.env.PORT}`);

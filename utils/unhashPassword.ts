@@ -1,4 +1,5 @@
-import * as bcrypt from "bcrypt";
+// import * as bcrypt from "bcrypt";
+import bcrypt from "bcryptjs";
 
 export function unhashPassword(
   myPlaintextPassword: string,
@@ -8,9 +9,12 @@ export function unhashPassword(
     bcrypt.compare(
       myPlaintextPassword,
       hash as string,
-      function (err: any, result: boolean) {
-        if (err) reject(err.message);
-        resolve(result);
+      function (err: any, result: boolean | undefined) {
+        if (err) {
+          reject(err.message);
+        } else {
+          resolve(result === true);
+        }
       }
     );
   });

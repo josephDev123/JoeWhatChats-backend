@@ -1,4 +1,5 @@
-import * as bcrypt from "bcrypt";
+// import * as bcrypt from "bcrypt";
+import bcrypt from "bcryptjs";
 
 export async function hashPassword(passwordToHash: string | number) {
   const myPassword: string = passwordToHash as string;
