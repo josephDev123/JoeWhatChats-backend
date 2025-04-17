@@ -42,6 +42,7 @@ const DomainOrigin = [
     process.env.ALLOWED_ORIGIN,
     process.env.ALLOWED_ORIGIN2,
     process.env.ALLOWED_ORIGIN3,
+    process.env.ALLOWED_ORIGIN4,
 ].filter((origin) => typeof origin === "string");
 const io = new socket_io_1.Server(HttpServer, {
     cors: {

@@ -34,6 +34,7 @@ const DomainOrigin = [
   process.env.ALLOWED_ORIGIN,
   process.env.ALLOWED_ORIGIN2,
   process.env.ALLOWED_ORIGIN3,
+  process.env.ALLOWED_ORIGIN4,
 ].filter((origin): origin is string => typeof origin === "string");
 
 const io = new Server(HttpServer, {
