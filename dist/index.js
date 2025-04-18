@@ -48,18 +48,19 @@ const DomainOrigin = [
 const io = new socket_io_1.Server(HttpServer, {
     cors: {
         // DomainOrigin
-        origin: "*",
+        origin: DomainOrigin,
     },
 });
-// function (origin, callback) {
-//   if (!origin || DomainOrigin.includes(origin)) {
-//     callback(null, true);
-//   } else {
-//     callback(new Error("Not allowed by CORS"));
-//   }
-// }
 app.use((0, cors_1.default)({
-    origin: "*",
+    // origin: "*",
+    origin: function (origin, callback) {
+        if (!origin || DomainOrigin.includes(origin)) {
+            callback(null, true);
+        }
+        else {
+            callback(new Error("Not allowed by CORS"));
+        }
+    },
     credentials: true,
 }));
 app.use(express_1.default.json());
