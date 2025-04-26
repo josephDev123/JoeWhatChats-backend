@@ -94,9 +94,9 @@ export const register = async (
       message: "New user created successfully",
       // data: userAndProfile,
     });
-  } catch (error: any) {
+  } catch (error) {
     // console.log("trying", error);
-    if (error.name === "RegistrationError") {
+    if (error instanceof GlobalError) {
       const customError = new GlobalError(
         error.message,
         error.name,
@@ -116,7 +116,11 @@ export const register = async (
   }
 };
 
-export const loginController = async (req: Request, res: Response) => {
+export const loginController = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   try {
     const { username, email, password } = req.body;
 
@@ -132,11 +136,16 @@ export const loginController = async (req: Request, res: Response) => {
     if (validationResult.error) {
       // Handle validation error
       console.log("validation error");
-      return res.json({
-        error: true,
-        showMessage: true,
-        message: validationResult.error.message,
-      });
+      next(
+        new GlobalError(
+          validationResult.error.message,
+          "JoiValidateError",
+          400,
+          true
+        )
+      );
+
+      return;
     }
 
     const hashedPassword = dbForPassword?.password;
@@ -144,31 +153,38 @@ export const loginController = async (req: Request, res: Response) => {
 
     if (comparePassword === false) {
       console.log("The password is not yet registered");
-      return res.json({
-        error: true,
-        showMessage: true,
-        message: "The password is not yet registered",
-      });
+      next(
+        new GlobalError(
+          "The password is not yet registered",
+          "PasswordError",
+          400,
+          true
+        )
+      );
+      return;
     }
 
     const new_Email = await isRegisteredEmail(email);
     if (new_Email === false) {
       console.log("The email is not yet registered");
-      return res.json({
-        error: true,
-        showMessage: true,
-        message: "The email is not yet registered",
-      });
+      next(
+        new GlobalError(
+          "The email is not yet registered",
+          "EmailError",
+          400,
+          true
+        )
+      );
+      return;
     }
 
     const checkUsernameAlreadyRegistered = await isUsernameRegistered(username);
     if (checkUsernameAlreadyRegistered === false) {
       console.log("The username is not yet registered");
-      return res.json({
-        error: true,
-        showMessage: true,
-        message: "The name is not yet registered",
-      });
+      next(
+        new GlobalError("The name is not yet registered", "Notfound", 400, true)
+      );
+      return;
     }
     const token = await createToken(email);
 
@@ -189,11 +205,13 @@ export const loginController = async (req: Request, res: Response) => {
       message: "login successful",
     });
   } catch (error) {
-    return res.json({
-      error: true,
-      showMessage: false,
-      message: (error as Error).message,
-    });
+    if (error instanceof GlobalError) {
+      return next(new GlobalError(error.message, error.name, 400, true));
+    }
+
+    return next(
+      new GlobalError("Something went wrong", "AuthError", 400, false)
+    );
   }
 };
 

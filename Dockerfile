@@ -1,11 +1,14 @@
-FROM node:23-alpine3.20
-WORKDIR /
-COPY package*.json .
-RUN npm i
+FROM node:23-alpine3.20 AS builder
+WORKDIR /app
+COPY package*.json . 
+RUN npm install
 COPY . .
 RUN npm run build
+
+FROM node:23-alpine AS production
+WORKDIR /app
+COPY --from=builder /app/node_modules ./node_modules
+COPY --from=builder /app/dist ./dist
+COPY --from=builder /app/package*.json . 
 EXPOSE 7000
-# Mount the .env secret at build time (it won't persist)
-# RUN --mount=type=secret,id=env_file cat /run/secrets/env_file > .env
-# CMD [ "node", "dist/src/index.js" ]
-CMD ["npm" ,"run" ,"start" ]
+CMD ["npm", "run", "start"]

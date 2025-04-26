@@ -37,7 +37,9 @@ const DomainOrigin = [
   process.env.ALLOWED_ORIGIN4,
   process.env.ALLOWED_ORIGIN5,
   process.env.ALLOWED_ORIGIN6,
-].filter((origin): origin is string => typeof origin === "string");
+]
+  .filter((origin): origin is string => typeof origin === "string")
+  .map((origin) => origin.trim());
 
 const io = new Server(HttpServer, {
   cors: {
@@ -59,6 +61,8 @@ app.use(
     credentials: true,
   })
 );
+// console.log("Allowed Origins:", DomainOrigin);
+
 app.use(express.json());
 app.use(cookieParser());
 

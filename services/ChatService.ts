@@ -14,8 +14,8 @@ export class ChatService {
         CustomError.name,
         CustomError.message,
         CustomError.statusCode,
-        CustomError.operational,
-        CustomError.stack
+        CustomError.operational
+        // CustomError.stack
       );
     }
   }

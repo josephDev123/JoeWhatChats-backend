@@ -20,8 +20,8 @@ export class ConversationRepo {
         CustomError.name,
         CustomError.message,
         CustomError.statusCode,
-        CustomError.operational,
-        CustomError.stack
+        CustomError.operational
+        // CustomError.stack
       );
     }
   }
@@ -42,8 +42,8 @@ export class ConversationRepo {
         CustomError.name,
         CustomError.message,
         CustomError.statusCode,
-        CustomError.operational,
-        CustomError.stack
+        CustomError.operational
+        // CustomError.stack
       );
     }
   }

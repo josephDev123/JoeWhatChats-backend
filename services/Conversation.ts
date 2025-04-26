@@ -40,8 +40,8 @@ export class ConversationService {
         CustomError.name,
         CustomError.message,
         CustomError.statusCode,
-        CustomError.operational,
-        CustomError.stack
+        CustomError.operational
+        // CustomError.stack
       );
     } finally {
       await session.endSession();
@@ -101,8 +101,8 @@ export class ConversationService {
         CustomError.name,
         CustomError.message,
         CustomError.statusCode,
-        CustomError.operational,
-        CustomError.stack
+        CustomError.operational
+        // CustomError.stack
       );
     } finally {
       await session.endSession();
@@ -119,8 +119,8 @@ export class ConversationService {
         ErrorFormat.message,
         ErrorFormat.name,
         ErrorFormat.statusCode,
-        ErrorFormat.operational,
-        ErrorFormat.stack
+        ErrorFormat.operational
+        // ErrorFormat.stack
       );
     }
   }
