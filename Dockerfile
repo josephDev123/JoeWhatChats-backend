@@ -10,5 +10,6 @@ WORKDIR /app
 COPY --from=builder /app/node_modules ./node_modules
 COPY --from=builder /app/dist ./dist
 COPY --from=builder /app/package*.json . 
-EXPOSE 7000
-CMD ["npm", "run", "start"]
+EXPOSE 7000 9229
+# CMD ["npm", "run", "start"]
+CMD ["node", "--inspect=0.0.0.0:9229", "dist/index.js"]

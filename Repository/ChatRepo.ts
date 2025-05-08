@@ -83,6 +83,8 @@ export class ChatRepo {
           $group: {
             _id: "$_id",
             conversation_name: { $first: "$conversation_name" },
+            creator: { $first: "$creator" },
+            avatar: { $first: "$avatar" },
             GroupMembers: { $addToSet: "$GroupMembers" },
             UserDetails: { $addToSet: { $arrayElemAt: ["$UserDetails", 0] } },
           },

@@ -47,7 +47,6 @@ Conversation.get(
 );
 
 //old route
-
 Conversation.get(
   "/:email",
   async function (req: Request, res: Response, next: NextFunction) {
